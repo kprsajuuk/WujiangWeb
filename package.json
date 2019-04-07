@@ -1,0 +1,20 @@
+{
+  "name": "wujiang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "4.16.4",
+    "jade": "^1.11.0",
+    "pg": "*",
+    "socket.io": "2.2.0"
+  }
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../components/header.ejs %>
+</head>
+
+<body>
+<div class="loadPage" id="loadingPage">
+    <div class="loading">
+        <span class="spinner"></span>
+    </div>
+</div>
+<div id="mainPage">
+<div class="loginWrapper" id="loginMesh">
+    <div class="loginInfo">
+        <div class="loginPrompt">起个名字吧</div>
+        <input type="text" placeholder="user name" id="loginInput">
+        <button id="loginBtn" class="actionBtn tranAnim" type="button" onclick="userLogin()">完成</button>
+        <p id="loginMessage"></p>
+    </div>
+</div>
+
+<div class="detailWrapper" id="detailWrapper" style="display:none">
+    <div class="detailPanel">
+        <div class="shogunDetail">
+            <table>
+                <tr>
+                    <th>等级</th>
+                    <th>名称</th>
+                    <th>攻</th>
+                    <th>受</th>
+                    <th>速</th>
+                    <th>范</th>
+                    <th>魔</th>
+                </tr>
+                <tr class="even">
+                    <td id="level"></td>
+                    <td id="shogunName"></td>
+                    <td id="attack"></td>
+                    <td id="defense"></td>
+                    <td id="speed"></td>
+                    <td id="range"></td>
+                    <td id="mana"></td>
+                </tr>
+                <tr>
+                    <td>技能</td>
+                    <td colspan="6" id="spell"></td>
+                </tr>
+                <tr class="even">
+                    <td>特性</td>
+                    <td colspan="6" id="attribute"></td>
+                </tr>
+                <tr>
+                    <td>神杖加强</td>
+                    <td colspan="6" id="aghanim"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="detailBtnPanel">
+            <button id="copyDetailBtn" class="copyDetail" onclick="copyDetail()">Copy</button>
+            <button id="hideDetailBtn" class="hideDetail" onclick="hideDetail()">X</button>
+            <textarea style="display:none" id="copyArea" class="copyTextArea"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="header" id="headTitle">
+    <div class="headerBrand">
+        <h1>Battle Arena</h1>
+    </div>
+    <div class="headerFooter">
+    </div>
+</div>
+
+
+<div class="mainControl">
+    <div class="playerNamePanel clearfix">
+        <div class="playerName"><span>玩家id: <p id="playerName" style="display:inline"></p></span></div>
+        <div class="shogunData"><button id="battleRequestBtn" class="battleRequest" onclick="showBattleField()">打嘛，来打嘛</button></div>
+        <div class="cleanPanel">
+            <button id="cleanBtn" class="actionBtn tranAnim" type="button" onclick="cleanAlert()"><p>Clear All</p></button>
+        </div>
+        <div class="testModActivate"><button class="testBtn" id="testBtn" onclick="activateTest()"><p>测试模式</p></button></div>
+    </div>
+    <div class="fieldPanel" id="battleField" style="display:none">
+        <!--<iframe src="https://docs.google.com/spreadsheets/d/1nQ5YzK5obdGgomdX9N14JWPf4u9Z6CX-4hDvF1qS0aI/edit#gid=1869954526" frameborder="0"></iframe>-->
+    </div>
+	<div class="mainContent clearfix">
+        <div class="promptContent">
+            <div class="promptPanel">
+                <div class="promptContext" id="promptInfo">
+                </div>
+            </div>
+            <div class="chatPanel clearfix">
+                <div class="chatContext" id="chatMsg">
+                    
+                </div>
+                <div class="chatInput">
+                    <div class="chatInputPanel">
+                        <input type="text" class="chatInputMsg" id="chatInputArea" placeholder="回车发送">
+                    </div>
+                    <button class="chatBtn" id="sendBtn" onclick="sendMessage()">GO</button>
+                </div>
+            </div>
+        </div>
+        <div class="midContent">
+            <div class="midPanel tranAnim">
+                <div class="mainPanel" id="roomPanel">
+                    <button id="roomBtn" class="actionBtn tranAnim" type="button"onclick="createSession()">创建房间</button>
+                    <button id="joinRoomBtn" class="actionBtn tranAnim" type="button"onclick="sessionInput()">加入房间</button>
+                </div>
+                <div style="display:none;" class="mainPanel" id="showRoom">
+                    <div class="showRoom">房间号:<p id="showRoomID"></p></div>
+                </div>
+                <div style="display:none;" class="mainPanel" id="joinPanel">
+                    <form>
+                        房间号:<br>
+                        <input type="text" id="roomID"><br>
+                    </form> 
+                    <button id="joinBtn" class="actionBtn tranAnim" type="button"onclick="joinSessionID()">加入房间</button>
+                    <button id="returnBtn" class="actionBtn tranAnim" type="button"onclick="returnMain()">返回</button>
+                </div>
+                <div style="display:none;" class="mainPanel" id="startPanel">
+                    <button id="startBtn" class="actionBtn tranAnim" type="button"onclick="startRound()">回合开始</button>
+                </div>
+                <div style="display:none;" id="ptInput">
+                    <div class="ptDisplay">
+                        <div>可用点数:<p id="currentPt">0</p></div>
+                    </div>
+                    <div class="ptInput">
+                        <input type="text" placeholder="请输入想要花费的点数" name="ptUse" id="ptUse" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                    </div>
+                    <div class="useBtn">
+                        <button id="useBtn" class="actionBtn tranAnim" type="button"onclick="usePt()">使用!</button>
+                        <button id="roundEnd" class="actionBtn tranAnim" type="button"onclick="endTurn()">回合结束</button>
+                    </div>
+                    <div class="alertMessage" id="alertMsg" style="display:none">没钱就不要装X</div>
+                </div>
+                <div style="display:none;" id="showTable">
+                    <div class="bothSideTable clearfix" id="shogunShow">
+                        <div class="tleft">
+                            <div class="info" id="p1">我方：</div>
+                        </div>
+                        <div class="tright">
+                            <div class="info" id="p2">敌方：</div>
+                        </div>
+                    </div>
+                    <button style="display:none" id="nextRound" class="actionBtn tranAnim" type="button"onclick="nextTurn()">下一局</button>
+                </div>
+                <div style="display:none;" id="preparePanel">
+                    <div id="waitInfo">等待其他玩家</div>
+                    <button style="display:none" id="roundStart" class="actionBtn tranAnim" type="button"onclick="startRound()">回合开始</button>
+                </div>
+            </div>
+            <button style="display:none" id="testButton" class="actionBtn tranAnim" type="button" onclick="getTestShogun()">???</button>
+        </div>
+        <div class="rightContent">
+            <div class="rightPanel">
+                <div class="shogunList" id="shogunList">
+                    <form id="shogunForm">
+                    </form>
+                </div>
+                <div class="shogunAction">
+                    <button id="shogunDelete" class="actionBtn tranAnim" type="button"onclick="sellShogun()" disabled="disabled">出售</button>
+                    <div class="alertMessage" id="sellAlert" style="display:none">请选择想要出售的武将</div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
